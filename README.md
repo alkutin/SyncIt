@@ -1,0 +1,4 @@
+SyncIt
+======
+
+Synchronizes folders smartly
