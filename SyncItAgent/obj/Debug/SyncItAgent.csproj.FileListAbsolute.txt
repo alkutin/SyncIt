@@ -1,0 +1,6 @@
+D:\Sights\SyncIt\SyncItAgent\bin\Debug\SyncItAgent.exe.config
+D:\Sights\SyncIt\SyncItAgent\bin\Debug\SyncItAgent.exe
+D:\Sights\SyncIt\SyncItAgent\bin\Debug\SyncItAgent.pdb
+D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.csprojResolveAssemblyReference.cache
+D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.exe
+D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.pdb
