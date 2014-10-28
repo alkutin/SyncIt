@@ -38,7 +38,7 @@ namespace SyncItAgent
 
         protected void SyncFolder(FolderConfiguration folder)
         {
-            Console.WriteLine("Doing {0} from {1} to {2}", folder.Method, folder.Source, folder.Destination);
+            Console.WriteLine("{3}: Doing {0} from {1} to {2}", folder.Method, folder.Source, folder.Destination, DateTime.Now.ToShortTimeString());
 
             var sourceFolders = Directory.GetDirectories(folder.Source, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Source.Length + 1)).ToList();
             var targetFolders = Directory.GetDirectories(folder.Destination, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Destination.Length + 1)).ToList();
