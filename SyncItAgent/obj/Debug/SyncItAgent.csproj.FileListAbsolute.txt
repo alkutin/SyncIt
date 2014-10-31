@@ -4,3 +4,5 @@ D:\Sights\SyncIt\SyncItAgent\bin\Debug\SyncItAgent.pdb
 D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.csprojResolveAssemblyReference.cache
 D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.exe
 D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.pdb
+D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.Properties.Resources.resources
+D:\Sights\SyncIt\SyncItAgent\obj\Debug\SyncItAgent.csproj.GenerateResource.Cache

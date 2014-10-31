@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SyncItAgent.Properties;
 
 namespace SyncItAgent
 {
@@ -14,16 +15,7 @@ namespace SyncItAgent
         {
             Console.WriteLine("Usage: SyncIt {settingsFile}");
             Console.WriteLine("Settings file example:");
-            Console.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            Console.WriteLine("<projects>");
-            Console.WriteLine(" <project name=\"AscendisWeb\">");
-            Console.WriteLine("  <folder \r\n" + 
-                "     source=\"D:\\Projects\\2010Collection\\AEM\\RELEASES\\AEM_1.0.0\\WEBSERVER\\Web\" \r\n" +
-                "     destination=\"C:\\inetpub\\sites\\AscendisDev\" method=\"hardlink\">");
-            Console.WriteLine("    <file source=\"kutin.web.config\" destination=\"web.config\" method=\"copy\" />");
-            Console.WriteLine("  </folder>");
-            Console.WriteLine(" </project>");
-            Console.WriteLine("</projects>");
+            Console.WriteLine(Resources.HelpConfig);            
         }
 
         static void Main(string[] args)
