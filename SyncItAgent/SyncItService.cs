@@ -96,7 +96,8 @@ namespace SyncItAgent
         private void SyncFile(FolderConfiguration folder, string sourcePath, string targetPath)
         {
             var targetExists = File.Exists(targetPath);
-            var needUpdate = !targetExists || File.GetLastWriteTimeUtc(targetPath) != File.GetLastWriteTimeUtc(sourcePath);
+            var lastWriteSourcePath = File.GetLastWriteTimeUtc(sourcePath);
+            var needUpdate = !targetExists || File.GetLastWriteTimeUtc(targetPath) != lastWriteSourcePath;
 
             if (needUpdate)
             {
@@ -114,7 +115,11 @@ namespace SyncItAgent
                         }
                         Console.WriteLine("Creating hardlink at {1} for {0}", sourcePath, targetPath);
                         CreateHardLink(targetPath, sourcePath, IntPtr.Zero);
-                        File.SetLastWriteTimeUtc(targetPath, File.GetLastWriteTimeUtc(sourcePath));
+                        if (lastWriteSourcePath != File.GetLastWriteTimeUtc(targetPath))
+                        {
+                            File.SetLastWriteTimeUtc(targetPath, lastWriteSourcePath);
+                        }
+                        
                         break;
                     default:
                         Console.WriteLine("Skipping {0}", targetPath);
