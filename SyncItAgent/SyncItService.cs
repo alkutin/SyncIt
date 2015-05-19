@@ -39,6 +39,8 @@ namespace SyncItAgent
         protected void SyncFolder(FolderConfiguration folder)
         {
             Console.WriteLine("{3}: Doing {0} from {1} to {2}", folder.Method, folder.Source, folder.Destination, DateTime.Now.ToShortTimeString());
+            if (folder.Method == SyncMethodType.Skip)
+                return;
 
             var sourceFolders = Directory.GetDirectories(folder.Source, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Source.Length + 1)).ToList();
             var targetFolders = Directory.GetDirectories(folder.Destination, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Destination.Length + 1)).ToList();
@@ -46,7 +48,18 @@ namespace SyncItAgent
             var sourceFiles = Directory.GetFiles(folder.Source, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Source.Length + 1)).ToList();
             var targetFiles = Directory.GetFiles(folder.Destination, "*.*", SearchOption.AllDirectories).Select(s => s.Substring(folder.Destination.Length + 1)).ToList();
 
-            var specialCareTargetItems = folder.SpecialCareItems != null ? folder.SpecialCareItems.Select(s => s.Destination).ToArray() : new string[0];
+            var specialCareTargetItems = folder.SpecialCareItems != null ? folder.SpecialCareItems.Select(s => s.Destination).ToList() : new List<string>();
+            foreach (
+                var specialFolder in
+                    specialCareTargetItems.Where(w => Directory.Exists(Path.Combine(folder.Source, w))).ToList())
+            {
+                var newFolders =
+                    sourceFolders.Where(w => w.StartsWith(specialFolder + "\\")).ToList();
+                var newFiles =
+                    sourceFiles.Where(w => w.StartsWith(specialFolder + "\\")).ToList();
+                specialCareTargetItems.AddRange(newFolders);
+                specialCareTargetItems.AddRange(newFiles);
+            }
 
             var foldersToCreate = sourceFolders.Except(specialCareTargetItems).Except(targetFolders).OrderBy(o => o);
             foreach (var folderToCreate in foldersToCreate)

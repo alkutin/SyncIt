@@ -7,6 +7,6 @@ namespace SyncItAgent
 {
     public enum SyncMethodType
     {
-        Hardlink, Copy
+        Hardlink, Copy, Skip
     }
 }
