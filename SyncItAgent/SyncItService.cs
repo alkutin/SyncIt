@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 namespace SyncItAgent
-{    
+{
     public class SyncItService
     {
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -29,8 +29,8 @@ namespace SyncItAgent
 
         protected void SyncProject(ProjectConfiguration project)
         {
-            Console.WriteLine("Syncing {0}", project.Name);
-            foreach (var folder in project.Folders)
+            Console.WriteLine("Syncing {0}", project?.Name);
+            foreach (var folder in project?.Folders)
             {
                 SyncFolder(folder);
             }
@@ -83,11 +83,18 @@ namespace SyncItAgent
             var filesToDelete = targetFiles.Except(specialCareTargetItems).Except(sourceFiles).Where(w => !string.IsNullOrEmpty(w));
             foreach (var fileToDelete in filesToDelete)
             {
-                var path = Path.Combine(folder.Destination, fileToDelete);                
+                var path = Path.Combine(folder.Destination, fileToDelete);
                 if (File.Exists(path))
                 {
                     Console.WriteLine("Deleting file {0}", path);
-                    File.Delete(path);
+                    try
+                    {
+                        File.Delete(path);
+                    }
+                    catch (Exception delException)
+                    {
+                        Console.WriteLine(delException.ToString());
+                    }
                 }
             }
 
@@ -108,36 +115,43 @@ namespace SyncItAgent
 
         private void SyncFile(FolderConfiguration folder, string sourcePath, string targetPath)
         {
-            var targetExists = File.Exists(targetPath);
-            var lastWriteSourcePath = File.GetLastWriteTimeUtc(sourcePath);
-            var needUpdate = !targetExists || File.GetLastWriteTimeUtc(targetPath) != lastWriteSourcePath;
-
-            if (needUpdate)
+            try
             {
-                switch (folder.Method)
+                var targetExists = File.Exists(targetPath);
+                var lastWriteSourcePath = File.GetLastWriteTimeUtc(sourcePath);
+                var needUpdate = !targetExists || File.GetLastWriteTimeUtc(targetPath) != lastWriteSourcePath;
+
+                if (needUpdate)
                 {
-                    case SyncMethodType.Copy:
-                        Console.WriteLine("Copying {0} to {1}", sourcePath, targetPath);
-                        File.Copy(sourcePath, targetPath, true);
-                        break;
-                    case SyncMethodType.Hardlink:
-                        if (targetExists)
-                        {
-                            Console.WriteLine("Deleting file {0}", targetPath);
-                            File.Delete(targetPath);
-                        }
-                        Console.WriteLine("Creating hardlink at {1} for {0}", sourcePath, targetPath);
-                        CreateHardLink(targetPath, sourcePath, IntPtr.Zero);
-                        if (lastWriteSourcePath != File.GetLastWriteTimeUtc(targetPath))
-                        {
-                            File.SetLastWriteTimeUtc(targetPath, lastWriteSourcePath);
-                        }
-                        
-                        break;
-                    default:
-                        Console.WriteLine("Skipping {0}", targetPath);
-                        break;
+                    switch (folder.Method)
+                    {
+                        case SyncMethodType.Copy:
+                            Console.WriteLine("Copying {0} to {1}", sourcePath, targetPath);
+                            File.Copy(sourcePath, targetPath, true);
+                            break;
+                        case SyncMethodType.Hardlink:
+                            if (targetExists)
+                            {
+                                Console.WriteLine("Deleting file {0}", targetPath);
+                                File.Delete(targetPath);
+                            }
+                            Console.WriteLine("Creating hardlink at {1} for {0}", sourcePath, targetPath);
+                            CreateHardLink(targetPath, sourcePath, IntPtr.Zero);
+                            if (lastWriteSourcePath != File.GetLastWriteTimeUtc(targetPath))
+                            {
+                                File.SetLastWriteTimeUtc(targetPath, lastWriteSourcePath);
+                            }
+
+                            break;
+                        default:
+                            Console.WriteLine("Skipping {0}", targetPath);
+                            break;
+                    }
                 }
+            }
+            catch (Exception errorException)
+            {
+                Console.WriteLine(errorException.ToString());
             }
         }
 

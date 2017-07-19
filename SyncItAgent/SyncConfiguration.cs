@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 
 namespace SyncItAgent
 {
-    [Serializable]    
+    [Serializable]
     public class SyncConfiguration
-    {        
+    {
         [XmlArrayItem("Project")]
         public ProjectConfiguration[] Projects { get; set; }
     }

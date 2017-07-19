@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace SyncItAgent
     {
         public static SyncConfiguration LoadConfiguration(string path)
         {
+            Debug.WriteLine(typeof(SyncConfiguration).FullName);
             var serializer = new XmlSerializer(typeof(SyncConfiguration));
             using (var stream = File.OpenRead(path))
             {
