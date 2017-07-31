@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace SyncItAgent
 {
@@ -27,9 +28,10 @@ namespace SyncItAgent
             }
         }
 
-        protected void SyncProject(ProjectConfiguration project)
+        protected async void SyncProject(ProjectConfiguration project)
         {
-            Console.WriteLine("Syncing {0}", project?.Name);
+            await Task.Delay(project.ListenShiftSecs*1000);
+            Console.WriteLine("{1} Syncing {0}", project?.Name, DateTime.Now.ToShortTimeString());
             foreach (var folder in project?.Folders)
             {
                 SyncFolder(folder);
@@ -132,7 +134,7 @@ namespace SyncItAgent
                         case SyncMethodType.Hardlink:
                             if (targetExists)
                             {
-                                Console.WriteLine("Deleting file {0}", targetPath);
+                                Console.WriteLine("Deleting file " + targetPath);
                                 File.Delete(targetPath);
                             }
                             Console.WriteLine("Creating hardlink at {1} for {0}", sourcePath, targetPath);
@@ -144,7 +146,7 @@ namespace SyncItAgent
 
                             break;
                         default:
-                            Console.WriteLine("Skipping {0}", targetPath);
+                            Console.WriteLine("Skipping " + targetPath);
                             break;
                     }
                 }
@@ -165,8 +167,7 @@ namespace SyncItAgent
 
             if (isFile)
             {
-                var targetExists = File.Exists(targetPath);
-                SyncFile(parent, sourcePath, targetPath);
+                SyncFile(item, sourcePath, targetPath);
             }
 
             if (isFolder)

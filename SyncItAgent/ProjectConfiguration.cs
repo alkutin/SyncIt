@@ -8,7 +8,7 @@ namespace SyncItAgent
 {
     [Serializable]
     public class ProjectConfiguration
-    {        
+    {
         [XmlAttribute]
         public string Name { get; set; }
 
@@ -17,5 +17,8 @@ namespace SyncItAgent
 
         [XmlAttribute]
         public bool ListenChanges { get; set; }
+
+        [XmlAttribute]
+        public int ListenShiftSecs { get; set; }
     }
 }

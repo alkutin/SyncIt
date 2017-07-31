@@ -15,7 +15,7 @@ namespace SyncItAgent
         {
             Console.WriteLine("Usage: SyncIt {settingsFile}");
             Console.WriteLine("Settings file example:");
-            Console.WriteLine(Resources.HelpConfig);            
+            Console.WriteLine(Resources.HelpConfig);
         }
 
         static void Main(string[] args)
@@ -60,7 +60,7 @@ namespace SyncItAgent
                                 watcher.Created += watcher_Created;
                                 watcher.Renamed += watcher_Renamed;
                                 watcher.Changed += watcher_Changed;
-                                watcher.Deleted += watcher_Deleted;                                
+                                watcher.Deleted += watcher_Deleted;
 
                                 watchers.Add(watcher);
 
@@ -68,12 +68,12 @@ namespace SyncItAgent
                             }
                         }
                     }
-                }                
+                }
             }
 
             _configuration = configuration;
             InvokeLoop();
-            
+
             if (listeningForChanges)
             {
                 Console.WriteLine("Press enter to exit");
@@ -101,7 +101,7 @@ namespace SyncItAgent
 
         static void watcher_Deleted(object sender, FileSystemEventArgs e)
         {
-            
+
             InvokeLoop();
         }
 
